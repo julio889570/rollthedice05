@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Image,
@@ -7,8 +7,10 @@ import {
   Text,
   useColorScheme,
   View,
-  ImageSourcePropType
+  ImageSourcePropType,
+  Pressable
 } from 'react-native';
+
  import DiceOne from '../assets/One.png'
  import DiceTwo from '../assets/Two.png'
  import DiceThree from '../assets/Three.png'
@@ -19,6 +21,11 @@ import {
  type DiceProps = PropsWithChildren<{
     imageUrl: ImageSourcePropType
  }>
+
+ const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: false,
+};
  const Dice = ({imageUrl}: DiceProps ): React.JSX.Element=>{
   return(
     <View>
@@ -28,32 +35,70 @@ import {
  }
 function App(): React.JSX.Element {
 
+  const [diceImage, setDiceImage] = useState<ImageSourcePropType>(DiceOne)
 
+  const rollDiceOntap =()=>{
+    let randomNumber = Math.floor(Math.random() * 6) + 1;
+    switch(randomNumber){
+      case 1: 
+      setDiceImage(DiceOne)
+      break;
+      case 2: 
+      setDiceImage(DiceTwo)
+      break;
+      case 3: 
+      setDiceImage(DiceThree)
+      break;
+      case 4: 
+      setDiceImage(DiceFour)
+      break;
+      case 5:
+        setDiceImage(DiceFive)
+        break;
+        case 6:
+          setDiceImage(DiceSix)
+          break;
+    }
+
+     
+  }
   return (
-    <View><Text>Text is here</Text></View>
+
+    <View style={styles.container}>
+      <Dice imageUrl={diceImage} />
+      <Pressable onPress={rollDiceOntap}>
+       <Text style = {styles.rollDiceBtnText}>Roll the dice</Text> 
+      </Pressable>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFF2F2',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  diceContainer:{
+    margin: 12,
   },
   diceImage:{
-
+      width: 200,
+      height: 200,
+  },
+  rollDiceBtnText:{
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderWidth: 2,
+    borderRadius: 8,
+    borderColor: '#e5e0ff',
+    fontSize: 16,
+    color: '#8ea7e9',
+    fontWeight: '700',
+    textTransform: 'uppercase'
   }
+
 });
 
 export default App;
